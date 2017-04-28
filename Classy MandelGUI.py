@@ -24,7 +24,7 @@ class HUDbrot:
         exp_colo_values = tuple(range(0, 500))
 
         # Frames
-        relief = 'groove'
+        relief = 'flat'
         self.general_frame = Frame(master=master, borderwidth=5, relief=relief)
         self.spin_frame = Frame(master=self.general_frame, borderwidth=5, relief=relief)
         self.button_frame = Frame(master=master, borderwidth=5, relief=relief)
@@ -56,7 +56,7 @@ class HUDbrot:
         self.update_button = Button(self.button_frame, text='Mettre à jour', command=pic.load_from_hud)
         register(self.update_button, "F5")
         self.color_button = Button(self.button_frame, text='Couleurs', command=pic.change_colors)
-
+        self.undo_button = Button(self.button_frame, text='Annuler', command=pic.undo)
         self.save_button = Button(self.button_frame, text='Sauvegarder', command=pic.save)
 
         self.set_hud_values(pic)
@@ -93,40 +93,41 @@ class HUDbrot:
         """
 
         # Big frame, for everything except the buttons
-        self.general_frame.grid(row=1, column=0, sticky='WE')
+        self.general_frame.grid(row=1, column=0)
 
         # Max_it and exp widgets
-        self.spin_frame.grid(row=0, column=0, sticky='WE')
+        self.spin_frame.grid(row=0, column=0)
 
-        self.it_text.grid(row=0, column=0, sticky='W')
+        self.it_text.grid(row=0, column=0)
         self.it_spin.grid(row=0, column=1)
 
-        self.exp_text.grid(row=0, column=2, sticky='W')
+        self.exp_text.grid(row=0, column=2)
         self.exp_spin.grid(row=0, column=3)
 
         # Resolutions widgets
-        self.res_frame.grid(row=2, column=0, sticky='WE')
+        self.res_frame.grid(row=2, column=0)
 
-        self.res_text.grid(row=0, column=0, sticky='W')
-        self.sub_res_frame.grid(row=0, column=1, sticky='WE')
+        self.res_text.grid(row=0, column=0)
+        self.sub_res_frame.grid(row=0, column=1)
 
-        self.x_text.grid(row=0, column=0, sticky='E')
+        self.x_text.grid(row=0, column=0)
         self.x_spin.grid(row=0, column=1)
-        self.y_text.grid(row=1, column=0, sticky='E')
+        self.y_text.grid(row=1, column=0)
         self.y_spin.grid(row=1, column=1)
 
         # Exp_colo widgets
-        self.exp_colo_frame.grid(row=3, column=0, sticky='WE')
-        self.exp_text.grid(row=0, column=0)
+        self.exp_colo_frame.grid(row=3, column=0)
+        self.exp_colo_text.grid(row=0, column=0)
         self.exp_colo_spin.grid(row=0, column=1)
 
         # Buttons widgets
         self.button_frame.grid(row=3, column=0)
 
-        self.reset_button.grid(row=0, column=0, sticky='WE')
-        self.color_button.grid(row=0, column=1, sticky='WE')
-        self.update_button.grid(row=0, column=2, sticky='WE')
-        self.save_button.grid(row=0, column=3, sticky='WE')
+        self.save_button.grid(row=0, column=0)
+        self.color_button.grid(row=0, column=1)
+        self.update_button.grid(row=0, column=2)
+        self.undo_button.grid(row=0, column=3)
+        self.reset_button.grid(row=0, column=4)
 
         self.status = True
 
@@ -173,6 +174,7 @@ class MandelPic:
         self.colors = entrees['degr_colo']
         self.exp_colo = entrees['exp_colo']
 
+        self.undo_list = [{'centre': self.centre, 'taille_x': self.taille_x}]
         self.show()
 
     def set_to_default(self):
@@ -222,23 +224,41 @@ class MandelPic:
         self.show()
 
     def show(self):
-        """ Print the image using the self stored values.
+        """ Compute and print an image using the self stored values.
 
         :return: None
         """
 
         try:
-            self.im_raw = Mainbrot(self.resolution, self.centre, self.taille_x, self.max_it, self.colors,
-                                   n_core=self.n_core, exposant=self.exposant, exp_colo=self.exp_colo).image
+
+            # To trigger the exception before the widget is deleted
+            cache = Mainbrot(self.resolution, self.centre, self.taille_x, self.max_it, self.colors,
+                             n_core=self.n_core, exposant=self.exposant, exp_colo=self.exp_colo).image
+            try:
+                self.im_widget.grid_forget()
+                del self.im_widget
+            except AttributeError:
+                pass
+
+            self.im_raw = cache
             self.im_cooked = ImageTk.PhotoImage(self.im_raw)
             self.im_widget = Label(image=self.im_cooked)
 
             self.place()
             self.bindings()
-        except ZeroDivisionError:
+        except IndexError:
             error_str = 'Cette zone est totallement noire. Essayez une autre zone, ou augmentez le nombre d\'itérations'
             print(error_str)
             messagebox.showerror('Erreur', error_str)
+            self.set_to_prec()
+
+    def set_to_prec(self):
+        self.centre = self.undo_list[1]['centre']
+        self.taille_x = self.undo_list[1]['taille_x']
+
+    def undo(self):
+        self.set_to_prec()
+        self.show()
 
     def place(self):
         """ Place the image on the grid """
@@ -265,7 +285,7 @@ class MandelPic:
             self.taille_x *= 4
 
         self.load_from_hud(None)
-
+        self.undo_list.insert(0, {'centre': self.centre, 'taille_x': self.taille_x})
         print('\n>>>>//// clicked at {} + {}j'.format(coin.real + pas * event.x, coin.imag - pas * event.y))
 
     def change_colors(self):

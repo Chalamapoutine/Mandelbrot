@@ -9,31 +9,27 @@ class SaveHUD:
     Interface de sauvegarde
     '''
 
-    def __init__(self, pic):
+    def __init__(self, pic, hud):
         self.win = Tk()
 
-        self.pic = pic
-
-        self.entry_frame = Frame(master=self.win)
-
-        self.x_entry = Entry(self.entry_frame)
-        self.x_text = Label(master=self.entry_frame, text='Largeur :')
-
-        self.y_entry = Entry(self.entry_frame)
-        self.y_text = Label(master=self.entry_frame, text='Hauteur :')
-
-        self.button_frame = Frame(master=self.win)
+        self.hud = hud(self.win, pic)
 
         self.full_save_button = Button(master=self.button_frame, command=self.full_save, text="Sauvegarde complete")
         self.quick_save_button = Button(master=self.button_frame, command=self.quick_save, text="Sauvegarde rapide")
 
         self.show()
 
+    def load_from_hud(self):
+        self.new_res = (int(self.hud.x_spin.get()), int(self.hud.y_spin.get()))
+
     def full_save(self):
         name = filedialog.asksaveasfilename(defaultextension='.png')
-        new_res = (int(self.x_entry.get()), int(self.y_entry.get()))
-        Mainbrot(new_res, self.pic.centre, self.pic.taille_x, self.pic.max_it, self.pic.degrade,
-                               n_core=4).image.save(name)
+        res = (int(self.hud.x_spin.get()), int(self.hud.y_spin.get()))
+        max_it = int(self.hud.it_spin.get())
+        exp_colo = float(self.hud.exp_colo_spin.get())
+
+        Mainbrot(res, self.pic.centre, self.pic.taille_x, max_it, self.pic.degrade,
+                 n_core=4).image.save(name)
 
     def quick_save(self):
         name = filedialog.asksaveasfilename(defaultextension='.png')

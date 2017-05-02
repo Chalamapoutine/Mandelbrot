@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 
 class ColorSelector:
     """ Class used to choose colors for a MandelPic instance.
-
+    The details are for later
     """
 
     def __init__(self, pic):

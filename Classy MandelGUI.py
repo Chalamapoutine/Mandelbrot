@@ -247,7 +247,8 @@ class MandelPic:
             self.place()
             self.bindings()
         except IndexError:
-            error_str = 'Cette zone est totallement noire. Essayez une autre zone, ou augmentez le nombre d\'itérations'
+            error_str = 'Cette zone est totallement noire. Essayez une autre zone, ou augmentez le nombre d\'itérations' \
+                        '\n Cliquez egalement sur reinitialiser, c\'est bugue a partir de maintenant'
             print(error_str)
             messagebox.showerror('Erreur', error_str)
             self.set_to_prec()

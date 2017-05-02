@@ -11,7 +11,7 @@ from wckToolTips import register
 class HUDbrot:
     """ GUI class for mandelpic.
 
-    Filled with a lot of spinboxes and button, with a few sweet, sweet methods
+    Filled with a lot of spinboxes and buttons, with a few sweet, sweet methods
 
     """
 
@@ -22,6 +22,7 @@ class HUDbrot:
         exp_values = tuple(range(-100, 100))
         res_values = tuple(range(10, 2000, 10))
         exp_colo_values = tuple(range(0, 500))
+        coeff_zoom_values = tuple(range(2, 100))
 
         # Frames
         relief = 'flat'
@@ -39,6 +40,8 @@ class HUDbrot:
         # The color power settings
         self.exp_colo_text = Label(master=self.exp_colo_frame, text='Exposant de l\'égalisation :')
         self.exp_colo_spin = Spinbox(master=self.exp_colo_frame, values=exp_colo_values)
+        self.coeff_zoom_text = Label(master=self.exp_colo_frame, text='Puissance du zoom :')
+        self.coeff_zoom_spin = Spinbox(master=self.exp_colo_frame, values=coeff_zoom_values)
 
         # All the widgets used for resolution settings
         self.res_text = Label(master=self.res_frame, text="Résolution :")
@@ -53,17 +56,24 @@ class HUDbrot:
 
         # Those are latter called the "buttons"
         self.reset_button = Button(self.button_frame, text='Réinitialiser', command=pic.set_to_default)
+        register(self.reset_button, "Ctrl+R")
         self.update_button = Button(self.button_frame, text='Mettre à jour', command=pic.load_from_hud)
         register(self.update_button, "F5")
         self.color_button = Button(self.button_frame, text='Couleurs', command=pic.change_colors)
+        register(self.color_button, "Ctrl+C")
         self.undo_button = Button(self.button_frame, text='Annuler', command=pic.undo)
+        register(self.undo_button, "Ctrl+Z")
         self.save_button = Button(self.button_frame, text='Sauvegarder', command=pic.save)
-
+        register(self.save_button, "Ctrl+S")
         self.set_hud_values(pic)
 
-        master.bind('h', self.show())
+        master.bind('<Control-s>', pic.save)
         master.bind('<F5>', pic.load_from_hud)
+        master.bind('<Control-z>', pic.undo)
+        master.bind('<Control-c>', pic.change_colors)
+        master.bind('<Control-r>', pic.set_to_default)
         self.status = False
+        self.show()
 
     def set_hud_values(self, pic):
         """ Get values from pic, and set the HUD accordingly
@@ -77,6 +87,9 @@ class HUDbrot:
 
         self.exp_spin.delete(0, 'end')
         self.exp_spin.insert(0, pic.exposant)
+
+        self.coeff_zoom_spin.delete(0, 'end')
+        self.coeff_zoom_spin.insert(0, pic.coeff_zoom)
 
         self.x_spin.delete(0, 'end')
         self.x_spin.insert(0, pic.resolution[0])
@@ -119,6 +132,8 @@ class HUDbrot:
         self.exp_colo_frame.grid(row=3, column=0)
         self.exp_colo_text.grid(row=0, column=0)
         self.exp_colo_spin.grid(row=0, column=1)
+        self.coeff_zoom_text.grid(row=0, column=2)
+        self.coeff_zoom_spin.grid(row=0, column=3)
 
         # Buttons widgets
         self.button_frame.grid(row=3, column=0)
@@ -131,36 +146,9 @@ class HUDbrot:
 
         self.status = True
 
-    def hide(self):
-        """ Hide every item of the GUI (not complete)
-
-        :return: None
-        """
-        self.it_spin.grid_forget()
-        self.it_text.grid_forget()
-
-        self.exp_spin.grid_forget()
-        self.exp_text.grid_forget()
-
-        self.update_button.grid_forget()
-        self.status = False
-
-    def hide_and_seek(self, event):
-        """ Hide the HUD when it's shown, and show it when it is hidden.
-
-        :param event: Useless parameter, but event bindings always pass it, so it has to be expected
-        :return: None
-        """
-
-        if self.status:
-            self.hide()
-
-        else:
-            self.show()
-
 
 class MandelPic:
-    """ A picture of the mandelbrot set, with all informations on it, plus usefull methods
+    """ A picture of the mandelbrot set, with all information on it, plus useful methods
 
     """
 
@@ -173,6 +161,7 @@ class MandelPic:
         self.exposant = entrees['exposant']
         self.colors = entrees['degr_colo']
         self.exp_colo = entrees['exp_colo']
+        self.coeff_zoom = entrees['coeff_zoom']
 
         self.undo_list = [{'centre': self.centre, 'taille_x': self.taille_x}]
         self.show()
@@ -279,10 +268,10 @@ class MandelPic:
         self.centre = complex(coin.real + pas * event.x, coin.imag - pas * event.y)
 
         if event.num == 1:
-            self.taille_x /= 4
+            self.taille_x /= self.coeff_zoom
 
         if event.num == 3:
-            self.taille_x *= 4
+            self.taille_x *= self.coeff_zoom
 
         self.load_from_hud(None)
         self.undo_list.insert(0, {'centre': self.centre, 'taille_x': self.taille_x})
@@ -296,7 +285,7 @@ class MandelPic:
 
         ColorSelector(self)
 
-    def save(self):
+    def save(self, *trash):
         """ Create a temporary SaveHUD instance. See the SaveHUD docstring for more detail.
 
         :return: None
@@ -305,8 +294,8 @@ class MandelPic:
 
 
 if __name__ == '__main__':
-    dic_entrees = {'resolution': (500, 500), 'centre': 0, 'taille_x': 4,
-                   'max_it': 1500, 'degr_colo': 'quatre.png', 'exposant': 2, 'n_core': 4, 'exp_colo': 4}
+    dic_entrees = {'resolution': (500, 500), 'centre': 0, 'taille_x': 4,'max_it': 1500, 'degr_colo': 'quatre.png',
+                   'exposant': 2, 'n_core': 4, 'exp_colo': 4, 'coeff_zoom': 4}
     root = Tk()
     mandel_pic = MandelPic(dic_entrees)
     hud_brot = HUDbrot(root, mandel_pic)

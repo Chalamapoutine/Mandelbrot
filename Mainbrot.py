@@ -31,7 +31,7 @@ def determiner_mandelbrot(c, max_it, expo=2):
 
 
 class Mainbrot:
-    def __init__(self, resolution, centre, taille_x, max_it, colors, n_core=1, exposant=2, colo_expo=4):
+    def __init__(self, resolution, centre, taille_x, max_it, colors, n_core=1, exposant=2, exp_colo=4):
 
         """Coordinates all the functions and manage multi-core processing.
 
@@ -57,7 +57,7 @@ class Mainbrot:
         self.taille_x = taille_x
         self.max_it = max_it
         self.colors = colors
-        self.colo_expo = colo_expo
+        self.colo_expo = exp_colo
         self.n_core = n_core
         self.exposant = exposant
 

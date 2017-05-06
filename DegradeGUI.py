@@ -9,10 +9,15 @@ class ColorSelector:
     The details are for later
     """
 
-    def __init__(self, pic):
+    def __init__(self, pic, colors, dummy=False):
+        """
+
+        :param pic:
+        :param dummy: If true, the windows close immediately
+        """
         self.win = Tk()  # Creates a tkinter window
         self.pic = pic
-        self.colors = pic.colors
+        self.colors = colors
 
         if type(self.colors) == str:
 
@@ -38,6 +43,9 @@ class ColorSelector:
         self.canvas_gen()
         self.show()
         self.img_to_canvas()
+
+        if dummy:
+            self.end()
 
     def canvas_gen(self, *trash):
         """ Generate multiple canvases
@@ -178,8 +186,8 @@ class ColorSelector:
         :return:
         """
         self.colors_gen()
-        self.pic.colors = self.colors
-        self.pic.show()
+        # self.pic.colors = self.colors
+        #self.pic.show()
         self.win.destroy()
 
     def selector(self, event):

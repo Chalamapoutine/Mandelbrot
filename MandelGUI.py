@@ -2,9 +2,10 @@ from tkinter import *
 from tkinter import messagebox
 from Mainbrot import Mainbrot
 from PIL import ImageTk
-from SaveGUI import SaveHUD
+
 from tkinter.ttk import *
 from DegradeGUI import ColorSelector
+import SaveGUI as sg
 from wckToolTips import register
 
 
@@ -168,7 +169,7 @@ class MandelPic:
         self.colors = entrees['degr_colo']
         self.exp_colo = entrees['exp_colo']
         self.coeff_zoom = entrees['coeff_zoom']
-        self.color_selector = ColorSelector(self, dummy=True)
+        self.color_selector = ColorSelector(self, colors=self.colors, dummy=True)
         self.hud = HUDbrot(root, self)
 
         self.undo_list = [{'centre': self.centre, 'taille_x': self.taille_x}]
@@ -290,14 +291,14 @@ class MandelPic:
         :return: None
         """
 
-        self.color_selector = ColorSelector(self)
+        self.color_selector = ColorSelector(self, self.colors)
 
     def save(self, *trash):
         """ Create a temporary SaveHUD instance. See the SaveHUD docstring for more detail.
 
         :return: None
         """
-        SaveHUD(self, HUDbrot)
+        sg.SaveWin(self, HUDbrot)
 
 
 if __name__ == '__main__':

@@ -281,9 +281,10 @@ class MandelPic:
         if event.num == 3:
             self.taille_x *= self.coeff_zoom
 
-        self.load_from_hud(None)
+        print('\n>>>>//// clicked at {} + {}j, taille_x={}'
+              .format(coin.real + pas * event.x, coin.imag - pas * event.y, self.taille_x))
         self.undo_list.insert(0, {'centre': self.centre, 'taille_x': self.taille_x})
-        print('\n>>>>//// clicked at {} + {}j'.format(coin.real + pas * event.x, coin.imag - pas * event.y))
+        self.load_from_hud(None)
 
     def change_colors(self):
         """ Create a temporary ColorSelector instance. See the ColorSelector docstring for more detail.

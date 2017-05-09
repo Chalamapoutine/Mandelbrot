@@ -303,7 +303,7 @@ class MandelPic:
 
 
 if __name__ == '__main__':
-    dic_entrees = {'resolution': (500, 500), 'centre': 0, 'taille_x': 4,'max_it': 1500, 'degr_colo': 'quatre.png',
+    dic_entrees = {'resolution': (500, 500), 'centre': 0, 'taille_x': 4,'max_it': 500, 'degr_colo': 'quatre.png',
                    'exposant': 2, 'n_core': 4, 'exp_colo': 4, 'coeff_zoom': 4}
     root = Tk()
     mandel_pic = MandelPic(dic_entrees)

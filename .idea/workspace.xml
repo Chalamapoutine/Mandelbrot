@@ -25,6 +25,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD
       <file leaf-file-name="MandelGUI.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MandelGUI.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -61,6 +62,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2720">
               <caret line="189" column="9" selection-start-line="189" selection-start-column="9" selection-end-line="189" selection-end-column="9" />
+=======
+      <file leaf-file-name="Classy MandelGUI.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Classy MandelGUI.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1122">
+              <caret line="73" column="31" selection-start-line="73" selection-start-column="31" selection-end-line="73" selection-end-column="31" />
+>>>>>>> origin/master
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
                 <element signature="e#1628#2035#0" expanded="false" />
@@ -70,11 +78,31 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="Mainbrot.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Mainbrot.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1155">
               <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+=======
+      <file leaf-file-name="SaveGUI.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/SaveGUI.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Mainbrot.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Mainbrot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="663">
+              <caret line="59" column="33" selection-start-line="59" selection-start-column="33" selection-end-line="59" selection-end-column="33" />
+>>>>>>> origin/master
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
                 <element signature="e#253#825#0" expanded="false" />
@@ -97,8 +125,13 @@
       <file leaf-file-name="wckToolTips.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wckToolTips.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="459">
               <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+=======
+            <state relative-caret-position="2108">
+              <caret line="124" column="10" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
+>>>>>>> origin/master
               <folding />
             </state>
           </provider>
@@ -532,32 +565,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Mainbrot.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="187">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
             <element signature="e#253#825#0" expanded="false" />
             <element signature="e#3090#4357#0" expanded="false" />
+=======
+        <state relative-caret-position="1003">
+          <caret line="59" column="33" selection-start-line="59" selection-start-column="33" selection-end-line="59" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#253#825#0" expanded="false" />
+            <element signature="e#3089#4356#0" expanded="false" />
+>>>>>>> origin/master
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Histobrot.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="85">
           <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+=======
+        <state relative-caret-position="272">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+>>>>>>> origin/master
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wckToolTips.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="459">
           <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+=======
+        <state relative-caret-position="2108">
+          <caret line="124" column="10" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
+>>>>>>> origin/master
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/Degrabrot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -568,10 +621,25 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> origin/master
     <entry file="file://$PROJECT_DIR$/Classy MandelGUI.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+<<<<<<< HEAD
+=======
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#3590#4257#0" expanded="false" />
+            <element signature="e#4287#5673#0" expanded="false" />
+            <element signature="e#6354#6927#0" expanded="false" />
+            <element signature="e#6961#7120#0" expanded="false" />
+            <element signature="e#7156#7260#0" expanded="false" />
+            <element signature="e#7307#7752#0" expanded="false" />
+            <element signature="e#9975#10134#0" expanded="false" />
+          </folding>
+>>>>>>> origin/master
         </state>
       </provider>
     </entry>
@@ -818,8 +886,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SaveGUI.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="-544">
           <caret line="25" column="37" selection-start-line="25" selection-start-column="37" selection-end-line="25" selection-end-column="37" />
+=======
+        <state relative-caret-position="663">
+          <caret line="59" column="33" selection-start-line="59" selection-start-column="33" selection-end-line="59" selection-end-column="33" />
+>>>>>>> origin/master
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
@@ -828,6 +901,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MandelGUI.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="320">
           <caret line="297" column="91" selection-start-line="297" selection-start-column="91" selection-end-line="297" selection-end-column="91" />
           <folding>
@@ -847,18 +921,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+=======
+        <state relative-caret-position="2108">
+          <caret line="124" column="10" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
+>>>>>>> origin/master
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Mainbrot.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="-1155">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+=======
+        <state relative-caret-position="1122">
+          <caret line="73" column="31" selection-start-line="73" selection-start-column="31" selection-end-line="73" selection-end-column="31" />
+>>>>>>> origin/master
           <folding>
             <element signature="e#0#21#0" expanded="true" />
             <element signature="e#253#825#0" expanded="false" />
             <element signature="e#3090#4357#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SaveGUI.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -7,31 +7,48 @@ from DegradeGUI import ColorSelector
 
 
 class SaveHUD(HUDbrot):
-    """ Children class of HUDbrot
+    """ Save interface class / Classe d'interface de sauvegarde
+
+    Children class of MandelGUI.HUDbrot
+    Classe enfant de MandelGUI.HUDbrot
 
     """
 
     def __init__(self, master, pic, save_win):
-        """ Do the normal HUDbrot initialisation, and then replace the color button command by another one.
+        """ Replace HUDbrot.__init__ / Remplace HUDbrot.__init__
+
+        Do the normal MandelGUI.HUDbrot initialisation, and then replace the color button command by another one.
+        Fait l'initialisation normale de MandelGUI.HUDbrot, et remplace le bouton de couleur par un autre.
 
         :param master:
         :param pic:
         """
 
+        # Initialize the class like MandelGUI.HUDbrot / Initialize la classe comme MandelGUI.HUDbrot
         HUDbrot.__init__(self, master, pic)
+
+        # Replace the color_button, by a new with a new command
+        # Remplace le boutom couleur par un nouveau avec une autre commande
         self.color_button = Button(self.button_frame, text='Couleurs', command=save_win.change_colors)
+
+        # Force usage of the replacement show method / Force l'usage de la nouvelle methode show
         self.show()
 
     def show(self):
-        """ Show some item of the GUI
+        """ Replacement of MandelGUI.HUDbrot.show / Remplace MandelGUI.HUDbrot.show
+
+        Show some item of the original HUD
         Do not show every one of them, for instance the reset button is not needed anymore, so it's not there
+
+        Affiche certains elements de l'HUD originel.
+        Ne les affiches pas tous, par exemple, le bouton reinitialisé est inutile ici, il n'y est donc pas
         :return: None
         """
 
-        # Big frame, for everything except the buttons
+        # Big frame, for everything except the buttons / Gros cadre, pour tout sauf les boutons
         self.general_frame.grid(row=1, column=0)
 
-        # Max_it and exp widgets
+        # Max_it and exp widgets / Widgets pour max_it et exp
         self.spin_frame.grid(row=0, column=0)
 
         self.it_text.grid(row=0, column=0)
@@ -40,9 +57,8 @@ class SaveHUD(HUDbrot):
         self.exp_text.grid(row=0, column=2)
         self.exp_spin.grid(row=0, column=3)
 
-        # Resolutions widgets
+        # Resolutions widgets / Widgets de resolution
         self.res_frame.grid(row=2, column=0)
-
         self.res_text.grid(row=0, column=0)
         self.sub_res_frame.grid(row=0, column=1)
 
@@ -51,12 +67,12 @@ class SaveHUD(HUDbrot):
         self.y_text.grid(row=1, column=0)
         self.y_spin.grid(row=1, column=1)
 
-        # Exp_colo widgets
+        # Exp_colo widgets / Widgets de exp_colo
         self.exp_colo_frame.grid(row=3, column=0)
         self.exp_colo_text.grid(row=0, column=0)
         self.exp_colo_spin.grid(row=0, column=1)
 
-        # Buttons widgets
+        # Buttons widgets / Widget des boutons
         self.button_frame.grid(row=3, column=0)
         self.color_button.grid(row=0, column=1)
 

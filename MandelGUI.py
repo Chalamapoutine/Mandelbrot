@@ -12,11 +12,17 @@ from wckToolTips import register
 class HUDbrot:
     """ GUI class for mandelpic.
 
-    Filled with a lot of spinboxes and buttons, with a few sweet, sweet methods
+    Filled with a lot of useful spinboxes and buttons, with a few methods to make them visible, and make good use
+    of them.
 
     """
 
     def __init__(self, master, pic):
+        """ Creates all the buttons, frames and spinboxes, and save them in class attributes
+
+        :param master: The widget that will contain all the widget created here
+        :param pic: The MandelPic instance to which this HUDbrot instance is linked.
+        """
 
         # Possible values tuples for the different spinboxes
         it_values = tuple(range(0, 1000000, 500))
@@ -83,7 +89,7 @@ class HUDbrot:
         self.show()
 
     def set_hud_values(self, pic):
-        """ Get values from pic, and set the HUD accordingly
+        """ Get values from pic, and set the HUD's spinboxes accordingly
 
         :param pic: A MandelPic instance
         :return: None
@@ -107,7 +113,7 @@ class HUDbrot:
         self.exp_colo_spin.insert(0, pic.exp_colo)
 
     def show(self):
-        """ Show every item of the GUI
+        """ Show every item of the GUI, using the grid geometry manager.
 
         :return: None
         """
@@ -160,6 +166,12 @@ class MandelPic:
     """
 
     def __init__(self, entrees):
+        """
+
+        :param entrees: The dictionnary that contains base settings
+        """
+
+        self.entrees = entrees
         self.resolution = entrees['resolution']
         self.centre = entrees['centre']
         self.taille_x = entrees['taille_x']
@@ -172,44 +184,55 @@ class MandelPic:
         self.color_selector = ColorSelector(self, colors=self.colors, dummy=True)
         self.hud = HUDbrot(root, self)
 
+        # This list allows the user to undo what he did, as it save the differents locations visited by the user
+        # See the MandelPic.set_to_prec and MandelPic.undo methods to have more details
         self.undo_list = [{'centre': self.centre, 'taille_x': self.taille_x}]
-        self.show()
+
+        self.show()  # Show an image / Affiche une image
 
     def set_to_default(self):
         """ Set the values to default, and update the image.
 
         :return: None
         """
-        global dic_entrees
-        global hud_brot
-        self.resolution = dic_entrees['resolution']
-        self.centre = dic_entrees['centre']
-        self.taille_x = dic_entrees['taille_x']
-        self.max_it = dic_entrees['max_it']
-        self.colors = dic_entrees['degr_colo']
-        self.n_core = dic_entrees['n_core']
-        self.exposant = dic_entrees['exposant']
-        self.exp_colo = dic_entrees['exp_colo']
 
-        hud_brot.set_hud_values(self)
+        self.resolution = self.entrees['resolution']
+        self.centre = self.entrees['centre']
+        self.taille_x = self.entrees['taille_x']
+        self.max_it = self.entrees['max_it']
+        self.colors = self.entrees['degr_colo']
+        self.n_core = self.entrees['n_core']
+        self.exposant = self.entrees['exposant']
+        self.exp_colo = self.entrees['exp_colo']
+
+        self.hud.set_hud_values(self)
 
         self.show()
 
     def bindings(self):
+
+        """ Binds the image to different clicks. Allows it to react to mouse clicks
+        """
+
         self.im_widget.bind('<Button-1>', self.clicked)
         self.im_widget.bind('<Button-2>', self.clicked)
         self.im_widget.bind('<Button-3>', self.clicked)
 
     def obliterate(self):
-        """ Completly remove the image"""
+        """ Completely remove the image
+        Enleve completement l'image
+        """
 
         self.im_widget.grid_forget()
         self.im_widget.destroy()
 
-    def load_from_hud(self, *event):
+    def load_from_hud(self, *trash):
         """ Get user set values from the HUD, and update the image.
+        Recupere les valeurs rentrées par l'utilisateur dans le HUD, et met l'image a jour.
 
-        :param event: Trash parameter for event bindings
+        :param trash: Just to catch the event parameter that is useless here, but still mandatory.
+                      Juste pour attraper le parametre d'evenemnt qui est ici inutile, mais neanmoins obligatoire.
+
         :return: None
         """
 
@@ -218,42 +241,76 @@ class MandelPic:
         self.resolution = (int(self.hud.x_spin.get()), int(self.hud.y_spin.get()))
         self.exp_colo = float(self.hud.exp_colo_spin.get())
         self.colors = self.color_selector.colors
+
         self.show()
 
     def show(self):
         """ Compute and print an image using the self stored values.
+        Used when the self stored values has been updated, and the user wants to apply the changes.
 
         :return: None
         """
 
         try:
 
-            # To trigger the exception before the widget is deleted
+            # To trigger the black image associated exception before the widget is deleted, this is done first
+            # Pour declencher l'exception associee a une image noire avant que le widget d'image ne soit supprime
+
             cache = Mainbrot(self.resolution, self.centre, self.taille_x, self.max_it, self.colors,
                              n_core=self.n_core, exposant=self.exposant, exp_colo=self.exp_colo).image
             try:
+                # Try to delete the widget / Essaye de supprimer le widget
                 self.im_widget.grid_forget()
                 del self.im_widget
             except AttributeError:
+                # If there is no widget to delete (if it's the first the image to be shown for instance), do nothing.
+                # S'il n'y a pas de widget a supprimer (si c'est la premiere image par exemple), ne fait rien.
                 pass
+
+            # If no exception was raised by creating the image, it is stored in class attributes and place
+            # Si aucune exception n'est remontee par la creation de l'image, tout est stocke dans des attribut de classe
 
             self.im_raw = cache
             self.im_cooked = ImageTk.PhotoImage(self.im_raw)
             self.im_widget = Label(image=self.im_cooked)
 
+            # Once it is stored, it is shown by those method / Une fois stocké, c'est montré par ces methodes
             self.place()
             self.bindings()
+
         except IndexError:
+
+            # The IndexError is raised when the user try to go in an all-black zone. When he does, an string is printed
+            # in the console, an error windows pops up, and the change caused by the click (or else) is reversed
+            # L'IndexError est remontee quand l'utilisateur essaye de se rendre dans une zone toute noire.
+            # Un message est alors affiché dans la console, et une fenetre d'erreur apparait.
+
             error_str = 'Cette zone est totallement noire. Essayez une autre zone, ou augmentez le nombre d\'itérations'
             print(error_str)
             messagebox.showerror('Erreur', error_str)
             self.set_to_prec()
 
     def set_to_prec(self):
+        """ Set the location related attributes to their last values, as stored in MandelPic.undo_list
+        Met les attributs lié au lieu a leur derniere valeur
+
+        :return: None
+        """
+
         self.centre = self.undo_list[1]['centre']
         self.taille_x = self.undo_list[1]['taille_x']
 
     def undo(self, *trash):
+        """ Calls MandelPic.set_to_prec, and then update the image
+        Appelle MandelPic,set_to_prec, puis met l'image a jour.
+
+        Linked to the "annuler" button
+        Lié au bouton "annuler"
+
+        :param trash: Just to catch the event parameter that is useless here, but still mandatory.
+                      Juste pour attraper le parametre d'evenemnt qui est ici inutile, mais neanmoins obligatoire.
+        :return:
+        """
         self.set_to_prec()
         self.show()
 
@@ -262,10 +319,12 @@ class MandelPic:
         self.im_widget.grid(row=0, column=0)
 
     def clicked(self, event):
-        """ When the image is clicked, change it appropriately.
+        """ When the image is clicked, change its location parameter appropriately.
+        Quand on clique sur l'image, changes ses parametres correctement.
 
-        :param event: mouse clicked
-        :return:
+        :param event: The event object. Used to determine wich mouse button was used.
+                      L'objet d'evenement. Sert a determiner avec quel bouton de la souris le clic a ete fait.
+        :return: None
         """
 
         taille_y = self.taille_x * (self.resolution[1] / self.resolution[0])
@@ -276,18 +335,30 @@ class MandelPic:
         self.centre = complex(coin.real + pas * event.x, coin.imag - pas * event.y)
 
         if event.num == 1:
+            # If left click is used, it's a zoom forward, and taille_x is reduced (divided by coeff_zoom)
+            # Si c'est un clic gauche, il s'agit d'un zoom en avant, et taille_x est reduit (divisé par coeff_zoom)
             self.taille_x /= self.coeff_zoom
 
         if event.num == 3:
+            # If right click is used, it's a zoom backward, and taille_x is increased (multiplied by coeff_zoom)
+            # Si c'est un clic droit, c'est un zoom en arriere, et taille_x est augmenté (multiplié par coeff_zoom)
             self.taille_x *= self.coeff_zoom
 
+        # Print where in the complex plane the user clicked / Affiche ou dans le plan complexe l'utilisateur a cliqué
         print('\n>>>>//// clicked at {} + {}j, taille_x={}'
               .format(coin.real + pas * event.x, coin.imag - pas * event.y, self.taille_x))
+
+        # Add the new location to the undo list / Ajoute le nouveau lieu a la undo_list
         self.undo_list.insert(0, {'centre': self.centre, 'taille_x': self.taille_x})
+
+        # Used tu
         self.load_from_hud(None)
 
     def change_colors(self):
-        """ Create a temporary ColorSelector instance. See the ColorSelector docstring for more detail.
+        """ Launch the color selecting interface / Lance l'interface de choix de couleurs
+
+        Creates a  ColorSelector instance. See the ColorSelector docstring for more details.
+        Creer une instance de ColorSelector. Voir la docstring de ColorSelector pour plus de details.
 
         :return: None
         """
@@ -295,7 +366,10 @@ class MandelPic:
         self.color_selector = ColorSelector(self, self.colors)
 
     def save(self, *trash):
-        """ Create a temporary SaveHUD instance. See the SaveHUD docstring for more detail.
+        """ Launch the save interface / Lance l'interface de sauvegarde
+
+        Creates a temporary SaveHUD instance. See the SaveHUD docstring for more detail.
+        Creer une instance temporaire de SaveWin. Voir la docstring de ColorSelector pour plus de details.
 
         :return: None
         """
@@ -303,9 +377,22 @@ class MandelPic:
 
 
 if __name__ == '__main__':
-    dic_entrees = {'resolution': (500, 500), 'centre': 0, 'taille_x': 4,'max_it': 500, 'degr_colo': 'quatre.png',
+
+    # This if block is executed only if MandelGUI is launched by the user, and not by another module's
+    # import statement.
+    # Ce bloque if est executé seulement si MandelGUI est lancé par l'utilisateur et pas par l'importation de ce
+    # module par un autre.
+
+    # The default setting are stored in this dictionnary / Les reglages par default sont stockés dans ce dictionnaire.
+    dic_entrees = {'resolution': (500, 500), 'centre': 0, 'taille_x': 4, 'max_it': 500, 'degr_colo': 'quatre.png',
                    'exposant': 2, 'n_core': 4, 'exp_colo': 4, 'coeff_zoom': 4}
+
+    # Creates a windows / creer une fenetre
     root = Tk()
+
+    # Launch the proper execution
     mandel_pic = MandelPic(dic_entrees)
 
+    # Forbid the programm to just close once computation are done
+    # Empeche le programme de juste se fermer une fois les calculs finis
     mainloop()

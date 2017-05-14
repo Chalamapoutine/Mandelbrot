@@ -68,7 +68,6 @@ class HUDbrot:
 
         # Those are latter called the "buttons" / Ces widgets sont appelés plus tard les "boutons"
         self.reset_button = Button(self.button_frame, text='Réinitialiser', command=pic.__init__)
-        register(self.reset_button, "Ctrl+R")  # Links a tooltip / Attache un tooltip
 
         self.update_button = Button(self.button_frame, text='Mettre à jour', command=pic.load_from_hud)
         register(self.update_button, "F5")  # Links a tooltip / Attache un tooltip
@@ -90,7 +89,6 @@ class HUDbrot:
         master.bind('<F5>', pic.load_from_hud)
         master.bind('<Control-z>', pic.undo)
         master.bind('<Control-c>', pic.change_colors)
-        master.bind('<Control-r>', pic.__init__)
 
         self.status = False
         self.show()
@@ -183,10 +181,12 @@ class MandelPic:
 
         :param entrees: The dictionnary that contains default settings / Le dictionnaire avec les reglages par defaut
         """
+
         try:
             self.entrees = entrees[0]
         except IndexError:
             pass
+
         self.resolution = self.entrees['resolution']
         self.centre = self.entrees['centre']
         self.taille_x = self.entrees['taille_x']

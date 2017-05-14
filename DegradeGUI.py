@@ -95,6 +95,7 @@ class ColorSelector:
 
         # Show the added canvas / Affiche le canvas ajouté
         self.canvas_list[len(self.canvas_list) - 1].grid(row=0, column=len(self.canvas_list))
+
         self.colorizer(self.canvas_list[len(self.canvas_list) - 1])
 
     def remove(self):

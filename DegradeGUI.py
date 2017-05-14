@@ -6,29 +6,37 @@ from PIL import Image, ImageDraw
 
 class ColorSelector:
     """ Class used to choose colors for a MandelPic instance.
-    The details are for later
+    Classe utilisée pour choisir les couleur d'une instance Mandelpic.
+
     """
 
     def __init__(self, pic, colors, dummy=False):
         """
 
         :param pic:
-        :param dummy: If true, the windows close immediately
+        :param dummy: If True, the windows is closed immediately.
+                      Used to generate an instance without any actual user choice.
+                      Si True, la fenetre est fermée sur le champ.
+                      Cela sert a generer une instance sans choix par l'utilisateur.
         """
-        self.win = Tk()  # Creates a tkinter window
+        self.win = Tk()  # Creates a tkinter window / cree une fenetre tkinter
+
+        # Save arguments in class attributs / Sauvegarde les arguments dans des attributs de classe
         self.pic = pic
         self.colors = colors
 
+        # If colors is just a filename, open the file itself and put it in the attribute.
+        # Si colors est un nom de fichier, ouvre le fichier et le met dans l'attribut de classe.
         if type(self.colors) == str:
 
             self.colors = Image.open(self.colors)
 
-        # Frames allow horizontally aligned buttons, they apply to every object a column within that same frame
+        # Frames / Cadres
         self.canvas_frame = Frame(master=self.win)
         self.spin_frame = Frame(master=self.win)
         self.button_frame = Frame(master=self.win)
 
-        # Command buttons
+        # Buttons / Boutons
         self.save_button = Button(master=self.button_frame, text='Sauvegarder', command=self.save)
         self.load_button = Button(master=self.button_frame, text='Ouvrir', command=self.open)
         self.end_button = Button(master=self.button_frame, text='Terminer', command=self.end)
@@ -36,23 +44,31 @@ class ColorSelector:
         self.spin_text = Label(master=self.spin_frame, text='Nombre de couleurs :')
         self.nb_pixel_spin = Spinbox(self.spin_frame, command=self.canvas_gen, from_=1, to=50)
 
+        # Put the default value in the spinbox / Met la valeur par default dans la spinbox
         self.nb_pixel_spin.delete(0, 'end')
         self.nb_pixel_spin.insert(0, 1)
 
+        # The canvas_list is a list filled with all the canvases. Each canvas represents a color.
         self.canvas_list = []
         self.canvas_gen()
         self.show()
+
+        # Because the first canvases should be accorded to the image's colors
+        # Parce que les premiers canvas doivent etre accordés aux couleurs de l'image.
         self.img_to_canvas()
 
+        # If it's a dummy instance, it's closed now / Si c'est une instance dummy, on la ferme maintenant.
         if dummy:
             self.end()
 
     def canvas_gen(self, *trash):
-        """ Generate multiple canvases
+        """ Generate multiple canvases / Genere plusieurs canvas
 
         Make the number of canvases the same as the spinbox value, do both deleting and adding
+        Rend le nombre de canvas egal a la valeur de la spinbox, en ajoutant et supprimant des canvas
 
-        :param trash: Trash parameter for event bindings
+         :param trash: Just to catch the event parameter that is useless here, but still mandatory.
+                      Juste pour attraper le parametre d'evenemnt qui est ici inutile, mais neanmoins obligatoire.
         :return: None
         """
 
@@ -64,36 +80,39 @@ class ColorSelector:
 
     def add(self):
 
-        """ Add a canvas (color block) to select colors
+        """ Add a canvas (color block) / Ajoute un canvas (bloc de couleur)
 
         :return: None
         """
 
         cache = Canvas(master=self.canvas_frame, width=32, height=32)
+        cache.color = (255, 255, 255)
 
         self.canvas_list.append(cache)
 
-        self.canvas_list[len(self.canvas_list) - 1].color = (0, 0, 0)
-
+        # Make the added canvas clickable / Rend le canvas ajouté cliquable
         self.canvas_list[len(self.canvas_list) - 1].bind('<Button-1>', self.selector)
 
+        # Show the added canvas / Affiche le canvas ajouté
         self.canvas_list[len(self.canvas_list) - 1].grid(row=0, column=len(self.canvas_list))
         self.colorizer(self.canvas_list[len(self.canvas_list) - 1])
 
     def remove(self):
 
-        """ Remove a canvas to select colors
+        """ Remove a canvas (the last one) / Supprime un canvas (le dernier de la liste)
 
         :return: None
         """
 
+        # Deadly nasty stuff
         self.canvas_list[len(self.canvas_list) - 1].grid_forget()
         self.canvas_list[len(self.canvas_list) - 1].destroy()
         del self.canvas_list[len(self.canvas_list) - 1]
 
     def show(self):
 
-        """ Show all the UI (user interface), except for the canvas
+        """ Show all the UI (user interface), except for the canvas, using the grid geometry manager
+        Affiche toute l'interface, a l'exception des canvas, avec le gestionnaire de geometrie grid
 
         :return: None
         """
@@ -110,21 +129,23 @@ class ColorSelector:
 
     def save(self):
 
-        """ Save the current canvas colors to a file on the hard drive
+        """ Save the current canvas colors to a PNG file on the hard drive
+        Sauvegarde les couleurs du canvas dans un fichier PNG sur le disque dur
 
         :return: None
         """
 
+        # Opens a tkinter-premade save windows / Ouvre une fenetre de sauvegarde fournie dans tkinter
         name = filedialog.asksaveasfilename(defaultextension='.png')
-        self.colors_gen()
 
+        self.colors_gen()
         self.colors.save(name)
 
     def open(self):
 
-        """ Open a color file and set the UI accordingly
+        """ Open a PNG file and set the canvases accordingly / Ouvre un fichier PNG et met les canvas conformement
 
-        :return:
+        :return: None
         """
 
         name = filedialog.askopenfilename(defaultextension='.png')
@@ -134,8 +155,8 @@ class ColorSelector:
     def img_to_canvas(self):
 
         """ Given an image, set the number of canvas and their colors properly
-
-        :return:
+        Avec une image, regle le nombre et la couleur des canvas correctement
+        :return: None
         """
         self.nb_pixel_spin.delete(0, 'end')
         self.nb_pixel_spin.insert(0, self.colors.width)
@@ -148,11 +169,12 @@ class ColorSelector:
             
     def colors_gen(self):
 
-        """ Given a canvas setup, generate a PIL Image object
+        """ Given a canvas setup, generate a PIL Image object / Genere une image PIL avec l'ensemble des canvas
 
-        The resulting image can be used by Mainbrot.master_control_program, or saved.
+        The resulting image can be used by Mainbrot.master_control_program, or saved as a PNG.
+        L'image resultante peut etre utilisée par Mainbrot.master_control_program, ou sauvegardée au format .
 
-        :return: None, the image is saved as a class argument
+        :return: None
         """
         width = int(self.nb_pixel_spin.get())
         self.colors = Image.new("RGB", (width, 1))
@@ -166,9 +188,10 @@ class ColorSelector:
 
     def colorizer(self, canvas):
 
-        """ Take a canvas as input, and fill it with a rectangle of the specified color
+        """ Take a canvas as input, and fill it with a rectangle of the self-stored color
+        Prend un canvas en entrée, et le colore de la couleur stockée par le canvas
 
-        :param canvas: The canvas to color
+        :param canvas: The canvas to color / Le canvas a colorer
         :return: None
         """
 
@@ -178,24 +201,26 @@ class ColorSelector:
 
     def end(self):
 
-        """ Used at the end of this instance
+        """ Used to close the windows / Utilisé pour fermer la fenetre
 
-        When the user has chosen the colors he wants, this close the window, and send all the data to the MandelPic
-        instance.
+        When the user has chosen the colors he wants, this close the window, but the ColorSelector instance is not
+        destroyed, so the generated data is still accessible as class attribute.
+        Quand l'utilisateur a fini de choisir ses couleurs, cela ferme la fenetre, mais l'instance de ColorSelector
+        n'est pas detruite, pour que les données generée soient toujours accessibles comme attributs de classe.
 
-        :return:
+        :return: None
         """
         self.colors_gen()
-        # self.pic.colors = self.colors
-        #self.pic.show()
         self.win.destroy()
 
     def selector(self, event):
 
         """Allows the user to chose the color of a clicked canvas
+        Permet a l'utilisateur de choisir la couleur d'un canvas sur lequel il clique.
 
         :param event: The click. Useful because it enable this function to know which canvas was clicked.
-        :return:
+                      Le clic. Utile car cette fonctionh a besoin de savoir quel canvas a ete cliqué
+        :return: None
         """
 
         event.widget.color = askcolor()[0]
@@ -205,9 +230,12 @@ class ColorSelector:
 
 def tuple_to_tk_string(c_tuple):
 
-    """Convert a color tuple to a color string usable by tkinter.
+    """Convert a (DDD, DDD, DDD) color tuple to a #HHHHHH hexadecimal based color string usable by tkinter.
+    Converti un tuple de couleur de la forme (DDD,DDD,DDD) en une chaine de la forme #HHHHHH, compatible avec tkinter
 
-    :param c_tuple: RGB color tuple
+
+    :param c_tuple: RGB color tuple (DDD, DDD, DDD) (3 decimal numbers, up to 3 digits)
+                    Tuple de couleur RGB (DDD, DDD, DDD) (3 nombres decimaux jusqu'a 3 chiffres par nombres)
     :return: HTML-like color string (3 pairs of characters representing hexadecimal number, and a '#' before them)
     """
 

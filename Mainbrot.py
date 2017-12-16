@@ -7,7 +7,7 @@ import Degrabrot
 
 
 @jit(nopython=True)
-def determiner_mandelbrot(c, max_it, expo=2):
+def determiner_mandelbrot(c, max_it: int, expo=2) -> bool:
     """Given a poin
 
     :param c: Point to check, a complex number

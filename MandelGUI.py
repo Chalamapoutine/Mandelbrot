@@ -238,6 +238,7 @@ class MandelPic:
         self.resolution = (int(self.hud.x_spin.get()), int(self.hud.y_spin.get()))
         self.exp_colo = float(self.hud.exp_colo_spin.get())
         self.colors = self.color_selector.colors
+        self.coeff_zoom = float(self.hud.coeff_zoom_spin.get())
 
         self.show()
 

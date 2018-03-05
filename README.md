@@ -27,7 +27,7 @@ The easiest parts to make parallel were, using the multiprocessing module. Some 
 
 Theses modules are the only one you can launch as a user, the other modules are called by them, and do not operate on their own.
 
-* SaveGUI.py A part of the GUI, it allows you to save picture you are exploring. A quick save just save the current image sowed by the GUI, a full save computes a new image, allowing you to change the settings just for the save (every relevent setting is available). 
+* SaveGUI.py A part of the GUI, it allows you to save the picture you are seeing. A quick save just save the current image showed by the GUI, a full save computes a new image, allowing you to change the settings just for the save (every relevent setting is available). 
 
 * DegradeGUI.py is another part of the GUI, which allows you to change the shading used to colour the image. The default setting is the one I found to be the most beautiful and is stored in "quatre.png" (there was 4 colours at one point)
 

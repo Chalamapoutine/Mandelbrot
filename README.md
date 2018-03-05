@@ -9,7 +9,7 @@ I presented it for my computer science oral exam at the baccalaureat (spécialit
 
 I used the anaconda python distribution that packs a lot of modules with it. You may be able to install every module on its own, but I found easier to just install anaconda.
 
-I use numba's decorator @jit for optimisation which is vital, it take computing times from the 20 minutes range to the 30 seconds range (it depends on the size and quality of the picture of course)
+I use numba's decorator @jit for optimisation which is vital, it take computing times from the 20 minutes range to the 30 seconds range (it depends on the size and quality of the picture of course). You can use this project without numba by manually removing the decorators and import statements, but it will be painfully slow.
 
 The image library used is PILLOW (a PIL fork for python 3)
 
@@ -48,5 +48,7 @@ The comments are in both french and english in the GUI part for my physics teach
 * Using numba on more function and methods (this is work, not just putting @jit in front of every one of them)
 
 * Trying some other optimisation package (cython ?)
+
+* Coding some of the bottleneck functions in C.
 
 * Making a Windows and Linux binary.
